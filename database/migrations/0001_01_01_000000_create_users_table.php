@@ -18,6 +18,13 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
+            $table->string('ap_usuario', 30)->nullable();
+            $table->string('am_usuario', 30)->nullable();
+            $table->string('tel_cel_usuario', 10)->nullable();
+            $table->string('tel_emergencia', 10)->nullable();
+            $table->string('rfc', 13)->nullable();
+             $table->string('rol', 30)->nullable();
+            $table->string('notas_medicas', 255)->nullable(); // Se permite nulo si no hay notas
             $table->timestamps();
         });
 
