@@ -13,40 +13,40 @@ class UserController extends Controller
         return response()->json(User::all());
     }
 
-    // Crear nuevo usuario con email y contraseña automáticos
     public function store(Request $request)
-    {
-        // Validación simple
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'ap_usuario' => 'nullable|string|max:255',
-            'am_usuario' => 'nullable|string|max:255',
-            'tel_cel_usuario' => 'nullable|string|max:20',
-            'tel_emergencia' => 'nullable|string|max:20',
-            'rfc' => 'nullable|string|max:13',
-            'rol' => 'required|string|max:50',
-            'notas_medicas' => 'nullable|string',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|string|min:6',
+        'ap_usuario' => 'nullable|string|max:255',
+        'am_usuario' => 'nullable|string|max:255',
+        'tel_cel_usuario' => 'nullable|string|max:20',
+        'tel_emergencia' => 'nullable|string|max:20',
+        'rfc' => 'nullable|string|max:13',
+        'rol' => 'required|string|max:50',
+        'notas_medicas' => 'nullable|string',
+         'membresia_id' => 'nullable|exists:membresias,id_membresia'
+    ]);
 
-        // Crear un email automático único
-        $email = strtolower(str_replace(' ', '', $request->name)) . uniqid() . '@cliente.com';
+    $user = User::create([
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+        'ap_usuario' => $request->ap_usuario,
+        'am_usuario' => $request->am_usuario,
+        'tel_cel_usuario' => $request->tel_cel_usuario,
+        'tel_emergencia' => $request->tel_emergencia,
+        'rfc' => $request->rfc,
+        'rol' => $request->rol,
+        'notas_medicas' => $request->notas_medicas,
+        'membresia_id' => $request->membresia_id,
+        
+    ]);
 
-        // Crear el usuario
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $email,
-            'password' => bcrypt('default123'), // Contraseña por defecto
-            'ap_usuario' => $request->ap_usuario,
-            'am_usuario' => $request->am_usuario,
-            'tel_cel_usuario' => $request->tel_cel_usuario,
-            'tel_emergencia' => $request->tel_emergencia,
-            'rfc' => $request->rfc,
-            'rol' => $request->rol,
-            'notas_medicas' => $request->notas_medicas,
-        ]);
+    return response()->json($user, 201);
+}
 
-        return response()->json($user, 201);
-    }
 
     // Ver un solo usuario
     public function show($id)

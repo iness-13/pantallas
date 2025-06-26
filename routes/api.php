@@ -16,7 +16,7 @@ Route::get('/user', function (Request $request) {
 Route::post('login',[LoginController::class, 'login']);
 
 Route::middleware('auth:sanctum')->prefix('membresias')->group(function () {
-    Route::get('/Todas', [MembresiaController::class, 'index']);
+    Route::get('/Todas', [MembresiaController::class, 'index']); //Ver Todas las Membresias
     Route::get('/only/{id}', [MembresiaController::class, 'show']); 
     Route::post('/nueva', [MembresiaController::class, 'store']);     
     Route::put('/actualizarMebre/{id}', [MembresiaController::class, 'update']); 
